@@ -6,6 +6,7 @@ My authored [Claude Code](https://docs.claude.com/en/docs/claude-code) skills. T
 
 | Skill | What it does |
 |---|---|
+| [ascii-architect](ascii-architect/SKILL.md) | Draws a system's architecture as a boxed ASCII diagram — the current repo, or a proposed one. |
 | [decision-tree](decision-tree/SKILL.md) | Turns a decision or set of options into a boxed ASCII flowchart saved as Markdown. |
 | [github-desc](github-desc/SKILL.md) | Generates 5 GitHub "About" descriptions from the repo, applies the pick with `gh repo edit`. |
 | [md-track](md-track/SKILL.md) | Finds Markdown docs that have fallen behind the code, then repairs them against the diff. |
