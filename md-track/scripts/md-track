@@ -1,0 +1,65 @@
+#!/usr/bin/env bash
+# md-track — shows how far each .md has drifted from the project's code.
+#
+# C_BEHIND  = code commits in the repo since the last commit that touched the
+#             .md. Commits that only touch *.md don't count.
+# N_UPDATES = how many commits have ever touched that .md.
+set -euo pipefail
+
+LIMIT=99
+
+root=$(git rev-parse --show-toplevel 2>/dev/null) || {
+  echo "md-track: not a git repository" >&2
+  exit 1
+}
+cd "$root"
+
+has_commits=$(git rev-parse --verify -q HEAD >/dev/null 2>&1 && echo 1 || echo 0)
+
+# Sort key in field 1, stripped after the sort.
+# NEW goes to the top: it's the most actionable (just commit it).
+new_row() {
+  printf '999999|%s|NEW|—|never committed|0\n' "$1"
+}
+
+rows() {
+  while IFS= read -r -d '' f; do
+    # Still in the index, gone from the worktree (deleted, or a dead symlink):
+    # there is no doc left to bring up to date, so a lag number is just noise.
+    [ -e "$f" ] || continue
+
+    if [ "$has_commits" = 0 ]; then new_row "$f"; continue; fi
+
+    IFS=$'\t' read -r sha hash subject < <(
+      git log -1 --format='%H%x09%h%x09%s' -- "$f"
+    )
+    # tracked but not committed yet (staged): no baseline, so NEW.
+    if [ -z "${sha:-}" ]; then new_row "$f"; continue; fi
+
+    # Always the whole repo, minus *.md: touching another doc doesn't count
+    # as new code.
+    behind=$(git rev-list --count "$sha"..HEAD -- . ':(exclude)*.md')
+    updates=$(git rev-list --count HEAD -- "$f")
+
+    [ "$behind" -gt "$LIMIT" ] && behind="$behind !"
+
+    subject=${subject//|//}
+    printf '%s|%s|%s|%s|%s|%s\n' \
+      "${behind%% *}" "$f" "$behind" "$hash" "${subject:0:40}" "$updates"
+  done < <(git ls-files -z '*.md')
+
+  while IFS= read -r -d '' f; do
+    new_row "$f"
+  done < <(git ls-files -z --others --exclude-standard '*.md')
+}
+
+# ponytail: 3 git calls per file, serially. Instant up to ~200 docs.
+# If it hurts in a monorepo, parallelise with xargs -P or switch to a single
+# git log --name-only pass.
+table=$(rows | sort -t'|' -k1,1nr | cut -d'|' -f2-)
+[ -z "$table" ] && { echo "md-track: no .md files found"; exit 0; }
+
+{
+  echo 'FILE|C_BEHIND|COMMIT|SUBJECT|N_UPDATES'
+  echo "$table"
+} | column -t -s '|' | if [ -t 1 ]; then cut -c "1-$(tput cols)"; else cat; fi
