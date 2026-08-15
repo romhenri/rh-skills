@@ -68,6 +68,18 @@ Layer top-to-bottom by who depends on whom — entry points and user-facing piec
 the top, storage and shared primitives at the bottom. That way the arrows all point
 one direction and the reader can stop tracing them individually.
 
+**External systems hang off the side.** Something you call over the network and can't
+read the source of is not a layer in your stack — if it has an API key, it's a
+sidecar. That splits storage on ownership, not on the word "database": a Postgres you
+deploy stays a normal box at the bottom, because you own its schema; Supabase, S3 or
+Planetscale become sidecars, because you own a credential. Sidecars don't count
+against the box budget — draw them and still aim for five to nine real boxes — but cap
+them at two or three, because a diagram tracking six vendors has stopped being an
+architecture diagram. They're the one exception to pointing at a box and finding it on
+disk, so hold them to the same standard against a different anchor: the client call
+that makes the arrow real. If you can't name the file and line that issues the
+request, don't draw the sidecar.
+
 ## Draw it
 
 Don't hand-draw boxes. Aligning borders, stems and arrowheads by eye fails silently —
@@ -117,6 +129,62 @@ skips a layer, which nearly always means the layering is wrong rather than the e
 Edge labels are optional and best kept under ~10 characters — use them for the
 *mechanism* (`HTTP`, `SQL`, `imports`, `SNS`), not for narration.
 
+External systems go in a separate `sides` list, so they never enter the layering at
+all:
+
+```json
+{"rows": [["generate\npipeline", "rate.py\nmetrics.py"],
+          ["question_experiments"],
+          ["experiments/data"]],
+ "edges": [["generate\npipeline", "question_experiments", "imports"],
+           ["rate.py\nmetrics.py", "question_experiments"],
+           ["question_experiments", "experiments/data", "JSONL"]],
+ "sides": [["question_experiments", "OpenRouter API", "HTTPS"]]}
+```
+
+```
+┌──────────┐    ┌────────────┐
+│ generate │    │  rate.py   │
+│ pipeline │    │ metrics.py │
+└──────────┘    └────────────┘
+      │                │
+      └────────┬───────┘
+               ▼ imports
+   ┌──────────────────────┐  HTTPS  ┌────────────────┐
+   │ question_experiments │ ◀─────▶ │ OpenRouter API │
+   └──────────────────────┘         └────────────────┘
+               │
+               │
+               ▼ JSONL
+     ┌──────────────────┐
+     │ experiments/data │
+     └──────────────────┘
+```
+
+Exactly one endpoint of a `sides` entry names a box in `rows` — that's the spine box;
+the other is the external system, which appears nowhere in `rows`.
+
+Links are **bidirectional by default**, drawn `◀───▶`, because the usual reason to call
+an external service is to use what comes back: the request and the response are both
+load-bearing, and drawing one arrow would say the data only moves one way. Reach for a
+one-way link when the return trip genuinely carries nothing you use — a fire-and-forget
+POST, an event published to a queue, a webhook arriving unprompted. Add `"one-way"` as
+a fourth field, and the arrow then points from the first endpoint to the second:
+
+```json
+"sides": [["shipper", "Datadog", "logs", "one-way"],
+          ["Stripe", "billing", "webhook", "one-way"]]
+```
+
+`shipper` pushes logs out and never reads a reply, so it renders `───▶`; the Stripe
+webhook arrives unprompted at `billing`, so it renders `◀───`. Note those hang off two
+different spine boxes — one sidecar per row, so a single box can't have both.
+
+Sidecars are drawn to the right and extend the canvas that way, which is what keeps
+the vertical spine from shifting when you add one. Two consequences: the spine box has
+to be the last one in its row, and a row can carry only one sidecar. The renderer
+raises on both rather than drawing an overlap — reorder the row, or split the diagram.
+
 The renderer prints `[width: N columns]` to stderr. Trust that number rather than
 re-measuring with `wc -L` or `awk`, which count bytes and will call a 60-column chart
 155 wide — every box-drawing character is three bytes. Past ~100 columns it wraps in
@@ -147,12 +215,18 @@ fans out to the services below. Every external request enters here.
 
 **billing service** — `apps/billing`. Owns subscriptions and Stripe webhooks. The
 only writer to the `invoices` tables.
+
+**Stripe** — external. Called from `apps/billing/charge.ts:41` via `stripe.charges`.
+Source of truth for payment state; we cache nothing.
 ````
 
 Keep the ASCII fenced so Markdown renderers don't reflow it. The box notes are what
 turn a picture into a document: one or two lines each, naming the path on disk and
 what the thing is responsible for. Skip the boxes that are self-explanatory rather
 than padding — `postgres` needs no paragraph.
+
+Sidecars always get a note, because they're the boxes a reader can't go find. Anchor
+each to its call site — file and line — so the arrow stays checkable.
 
 If drawing it surfaced something worth saying — a cycle, a box everything depends on,
 a service that turned out to be dead — say it in a short line under the diagram. That
