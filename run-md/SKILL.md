@@ -10,11 +10,11 @@ They will copy-paste from your file without reading prose. That is the whole job
 
 ## What RUN.md is
 
-A **maximum 30 line** file of shell commands under short headings. No paragraphs,
+A **maximum 20 line** file of shell commands under short headings. No paragraphs,
 no architecture notes, no "this project uses X to do Y". If a line doesn't get the
 reader closer to a running app, delete it.
 
-Length is a hard ceiling, not a target. 12 lines is better than 30. Most projects
+Length is a hard ceiling, not a target. 12 lines is better than 20. Most projects
 fit in under 20.
 
 ## Find the real commands
@@ -51,8 +51,7 @@ example value, say so in one trailing line rather than guessing.
 
 ## Structure
 
-Use whichever of these sections the project actually has. Drop the rest — an empty
-"Test" heading is a wasted line.
+Use whichever of these sections the project actually has.
 
 ~~~markdown
 # RUN.md
