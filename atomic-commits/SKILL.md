@@ -1,6 +1,6 @@
 ---
 name: atomic-commits
-description: Split a pile of uncommitted git changes into clean, atomic, conventionally-named commits in a sensible order. Use this whenever the user has accumulated many changes at once and wants them separated into logical commits, says "atomic commits", "split my commits", "organize my changes", "clean up this commit history", "commit these properly", or is about to open a PR and the diff is a mess of unrelated work. Also use when a single `git commit` would bundle changes that have nothing to do with each other.
+description: Split a pile of uncommitted git changes into clean, atomic commits, ordered sensibly and named in the style the repo's own history already uses. Use this whenever the user has accumulated many changes at once and wants them separated into logical commits, says "atomic commits", "split my commits", "organize my changes", "clean up this commit history", "commit these properly", or is about to open a PR and the diff is a mess of unrelated work. Also use when a single `git commit` would bundle changes that have nothing to do with each other.
 allowed-tools: Bash(git:*)
 ---
 
@@ -21,6 +21,7 @@ commit along them.
 git status
 git diff --stat
 git diff            # and `git diff --cached` if anything is already staged
+git log --oneline -30   # how this repo writes commit messages
 ```
 
 Read the actual diff, not just the file names. Two changes in the same file
@@ -32,7 +33,9 @@ belong to the same one. File boundaries are a hint, not the answer.
 Group hunks by intent, not by location. A useful test: could each group be
 described in one sentence with no "and" in it? If not, split further.
 
-Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`.
+Useful intents to sort by: feature, fix, docs, tests, refactor, chore. These are
+for your own grouping; whether they appear in the message depends on the repo's
+style, covered below.
 
 Before committing, state the plan back to the user as a short list of the
 commits you intend to make, in order. It is cheap for them to correct the
@@ -63,6 +66,9 @@ git add src/pages/Login.tsx src/components/LoginForm.tsx
 git commit -m "feat(auth): add login page with validation"
 ```
 
+(Those subjects are written in conventional style for the example only. Use
+whatever style the log showed you.)
+
 Never `git add .` or `git add -A` here. It defeats the entire point and will
 sweep in unrelated work the user did not mention. Stage explicit paths, and
 when one file contains hunks belonging to different commits, split it:
@@ -91,15 +97,41 @@ people see, and rewriting it afterwards costs them a force-push.
 
 ## Message format
 
+The repo already has a house style, and `git log --oneline -30` shows it. Match
+what is there. A history that reads consistently is worth more than a history
+that switches to a better format halfway down, because the inconsistency is what
+people notice, and it makes your commits look like they came from somewhere else.
+
+Read the last 30 subjects and answer four questions:
+
+- **Prefixes?** `feat:` / `fix(scope):` conventional prefixes, a ticket key
+  (`PROJ-123:`), an area tag (`[api]`), or nothing at all.
+- **Mood?** Imperative (`Add login page`) or past tense (`Added login page`).
+- **Case?** `Add login page` or `add login page`.
+- **Bodies?** Subject only, or a body explaining the reasoning.
+
+Then write in that style, even if you would have chosen differently. A repo whose
+log is thirty lines of `Update readme` is telling you it does not want
+conventional commits.
+
+If the log is genuinely mixed, or the repo has almost no history, fall back to
+conventional commits, since they encode the grouping you just did:
+
 ```
 <type>(<scope>): <description>
 
 [optional body explaining why, not what]
 ```
 
-Imperative mood, no trailing period, lowercase after the colon. The subject
-line says what changed; the body is only worth writing when the reason is not
-obvious from the diff.
+Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`. Imperative
+mood, no trailing period, lowercase after the colon.
+
+A `CONTRIBUTING.md`, a `commitlint` config, or a `.gitmessage` template outranks
+the log; those are the convention written down on purpose, while the log is only
+the convention as practised. Check for them when the log looks inconsistent.
+
+Whichever style you land on, the subject says what changed. A body is only worth
+writing when the reason is not obvious from the diff.
 
 ## When not to split
 
