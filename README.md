@@ -4,33 +4,31 @@ My authored [Claude Code](https://docs.claude.com/en/docs/claude-code) skills. T
 
 ## Skills
 
-| Skill | What it does |
-|---|---|
-| [ascii-architect](ascii-architect/SKILL.md) | Draws a system's architecture as a boxed ASCII diagram — the current repo, or a proposed one. |
-| [atomic-commits](atomic-commits/SKILL.md) | Splits a pile of uncommitted changes into clean, atomic commits in a sensible order. |
-| [concept-lineage](concept-lineage/SKILL.md) | Maps a concept against its broader categories, sibling concepts and subtypes, each with a one-line definition. |
-| [decision-tree](decision-tree/SKILL.md) | Turns a decision or set of options into a boxed ASCII flowchart saved as Markdown. |
-| [github-desc](github-desc/SKILL.md) | Generates 5 GitHub "About" descriptions from the repo, applies the pick with `gh repo edit`. |
-| [md-track](md-track/SKILL.md) | Finds Markdown docs that have fallen behind the code, then repairs them against the diff. |
-| [readme-md](readme-md/SKILL.md) | Writes a repo's README.md from my own template, filled in from what the project contains. |
-| [run-md](run-md/SKILL.md) | Writes RUN.md — a ≤30-line copy-pasteable setup/run cheat sheet. |
+**ASCII**
 
-## Install
+- [ascii-architect](ascii-architect/SKILL.md): draws a system's architecture as a boxed ASCII diagram, the current repo or a proposed one.
+- [decision-tree](decision-tree/SKILL.md): turns a decision or set of options into a boxed ASCII flowchart saved as Markdown.
 
-```bash
-git clone https://github.com/<you>/skills.git ~/Dev/skills
-~/Dev/skills/install.sh
-```
+**Markdown gen**
 
-Symlinks every `*/SKILL.md` directory into `~/.claude/skills/`. Existing real directories are skipped, not clobbered. Override the destination with `CLAUDE_SKILLS_DIR`.
+- [readme-md](readme-md/SKILL.md): writes a repo's README.md from my own template, filled in from what the project contains.
+- [run-md](run-md/SKILL.md): writes RUN.md, a ≤20-line copy-pasteable setup/run cheat sheet.
+- [md-track](md-track/SKILL.md): finds Markdown docs that have fallen behind the code, then repairs them against the diff.
 
-## Adding a skill
+**Git Ops**
 
-```
-<name>/
-  SKILL.md          # frontmatter: name, description — required
-  scripts/          # optional, chmod +x
-  assets/           # optional templates
-```
+- [atomic-commits](atomic-commits/SKILL.md): splits a pile of uncommitted changes into clean, atomic commits in a sensible order.
+- [gitignore](gitignore/SKILL.md): writes a .gitignore from what the repo actually contains, and untracks what slipped in.
+- [github-desc](github-desc/SKILL.md): generates 5 GitHub "About" descriptions from the repo, applies the pick with `gh repo edit`.
 
-The `description` is the only thing Claude sees when deciding whether to load the skill — write it as trigger phrases, not a summary. Run `./install.sh` again to link it.
+**Study**
+
+- [concept-lineage](concept-lineage/SKILL.md): maps a concept against its broader categories, sibling concepts and subtypes, each with a one-line definition.
+
+# How to use
+
+`install.sh` symlinks all skills into `~/.claude/skills/`. You can also symlink individual skills into that directory, or copy them there.
+
+`softlink.sh` symlinks all skills into `~/.claude/skills/` but does not overwrite existing ones, so you can keep your own edits in place.
+
+`verify.sh` checks that all skills are symlinked into `~/.claude/skills/` and that they are up to date with this repo.
