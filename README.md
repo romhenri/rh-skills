@@ -7,6 +7,7 @@ My authored [Claude Code](https://docs.claude.com/en/docs/claude-code) skills. T
 | Skill | What it does |
 |---|---|
 | [ascii-architect](ascii-architect/SKILL.md) | Draws a system's architecture as a boxed ASCII diagram — the current repo, or a proposed one. |
+| [atomic-commits](atomic-commits/SKILL.md) | Splits a pile of uncommitted changes into clean, atomic commits in a sensible order. |
 | [concept-lineage](concept-lineage/SKILL.md) | Maps a concept against its broader categories, sibling concepts and subtypes, each with a one-line definition. |
 | [decision-tree](decision-tree/SKILL.md) | Turns a decision or set of options into a boxed ASCII flowchart saved as Markdown. |
 | [github-desc](github-desc/SKILL.md) | Generates 5 GitHub "About" descriptions from the repo, applies the pick with `gh repo edit`. |
