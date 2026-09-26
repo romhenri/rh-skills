@@ -78,8 +78,13 @@ first only because they can't skip it.
 - Copy-pasteable as-is: real flags, real paths, no `<placeholders>` unless the value
   is genuinely user-specific (an API key), and then make it obviously fake: `sk-...`.
 - One command per line. A reader should be able to run them top to bottom.
-- Annotate only where the command lies about itself — `npm run dev  # :3000`. A
-  comment restating the command (`npm test  # runs tests`) is noise.
+- Annotate only where the command lies about itself, and put the comment on its own
+  line above the command, never trailing it:
+  ```bash
+  # :3000
+  npm run dev
+  ```
+  A comment restating the command (`# runs tests`) is noise.
 - Multiple entry points (API + worker + web)? Show each with a heading of its own
   name, not a paragraph explaining the topology.
 - Monorepo? Give the root-level command that starts everything, plus the per-package
