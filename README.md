@@ -21,10 +21,6 @@ My authored [Claude Code](https://docs.claude.com/en/docs/claude-code) skills. T
 - [gitignore](gitignore/SKILL.md): writes a .gitignore from what the repo actually contains, and untracks what slipped in.
 - [github-desc](github-desc/SKILL.md): generates 5 GitHub "About" descriptions from the repo, applies the pick with `gh repo edit`.
 
-**Study**
-
-- [concept-lineage](concept-lineage/SKILL.md): maps a concept against its broader categories, sibling concepts and subtypes, each with a one-line definition.
-
 # How to use
 
 `install.sh` symlinks all skills into `~/.claude/skills/`. You can also symlink individual skills into that directory, or copy them there.
