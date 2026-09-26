@@ -15,6 +15,10 @@ My authored [Claude Code](https://docs.claude.com/en/docs/claude-code) skills. T
 - [run-md](run-md/SKILL.md): writes RUN.md, a ≤20-line copy-pasteable setup/run cheat sheet.
 - [md-track](md-track/SKILL.md): finds Markdown docs that have fallen behind the code, then repairs them against the diff.
 
+**Review**
+
+- [assignment-checker](assignment-checker/SKILL.md): checks a finished document/code against the brief that assigned it, item by item.
+
 **Git Ops**
 
 - [atomic-commits](atomic-commits/SKILL.md): splits a pile of uncommitted changes into clean, atomic commits in a sensible order.
