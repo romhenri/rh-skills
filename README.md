@@ -8,6 +8,7 @@ My authored [Claude Code](https://docs.claude.com/en/docs/claude-code) skills. T
 
 - [ascii-architect](ascii-architect/SKILL.md): draws a system's architecture as a boxed ASCII diagram, the current repo or a proposed one.
 - [decision-tree](decision-tree/SKILL.md): turns a decision or set of options into a boxed ASCII flowchart saved as Markdown.
+- [flight-deck-ascii](flight-deck-ascii/SKILL.md): renders used/planned/limit data as a "Flight Deck" ASCII panel with three-tone gauges, capped at 72 columns.
 
 **Markdown gen**
 
@@ -24,6 +25,11 @@ My authored [Claude Code](https://docs.claude.com/en/docs/claude-code) skills. T
 - [atomic-commits](atomic-commits/SKILL.md): splits a pile of uncommitted changes into clean, atomic commits in a sensible order.
 - [gitignore](gitignore/SKILL.md): writes a .gitignore from what the repo actually contains, and untracks what slipped in.
 - [github-desc](github-desc/SKILL.md): generates 5 GitHub "About" descriptions from the repo, applies the pick with `gh repo edit`.
+
+**Writing**
+
+- [english](english/SKILL.md): translates a text into natural English and returns only the translation.
+- [soft-improve](soft-improve/SKILL.md): light copyedit that fixes grammar, spelling and punctuation, with no rewriting or restructuring.
 
 # How to use
 
