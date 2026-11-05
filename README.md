@@ -23,8 +23,10 @@ My authored [Claude Code](https://docs.claude.com/en/docs/claude-code) skills. T
 **Git Ops**
 
 - [atomic-commits](atomic-commits/SKILL.md): splits a pile of uncommitted changes into clean, atomic commits in a sensible order.
+- [atomic-prs](atomic-prs/SKILL.md): splits a branch that mixes features into one PR per feature, each holding exactly that feature's commits.
 - [gitignore](gitignore/SKILL.md): writes a .gitignore from what the repo actually contains, and untracks what slipped in.
 - [git-track](git-track/SKILL.md): scans every repo under ~/Dev, ~/CDev, ~/DDev, ~/GameDev and ~/ADev for uncommitted changes and unpushed commits.
+- [github-graph](github-graph/SKILL.md): draws the last semester of the GitHub contribution graph in ASCII in the terminal, with total, streak and best day.
 - [github-desc](github-desc/SKILL.md): generates 5 GitHub "About" descriptions from the repo, applies the pick with `gh repo edit`.
 
 **Writing**
