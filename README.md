@@ -33,6 +33,7 @@ My authored [Claude Code](https://docs.claude.com/en/docs/claude-code) skills. T
 
 **Writing**
 
+- [enrich](enrich/SKILL.md): enriches an existing text by filling gaps, sharpening vague passages and explaining terms, while keeping its structure and voice.
 - [english](english/SKILL.md): translates a text into natural English and returns only the translation.
 - [soft-improve](soft-improve/SKILL.md): light copyedit that fixes grammar, spelling and punctuation, with no rewriting or restructuring.
 
