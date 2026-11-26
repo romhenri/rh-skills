@@ -19,6 +19,11 @@ My authored [Claude Code](https://docs.claude.com/en/docs/claude-code) skills. T
 **Review**
 
 - [assignment-checker](assignment-checker/SKILL.md): checks a finished document/code against the brief that assigned it, item by item.
+- [apply-pr-feedback](apply-pr-feedback/SKILL.md): fetches a PR's review comments (work account), recommends per finding, fixes the accepted ones one commit each, pushes on confirmation.
+
+**Testing**
+
+- [seed-test-scenario](seed-test-scenario/SKILL.md): creates minimal tagged test data in the local or staging DB, returns credentials, a short test script, and a cleanup offer.
 
 **Git Ops**
 
